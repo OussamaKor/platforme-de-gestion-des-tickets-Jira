@@ -28,7 +28,8 @@ export default function Project() {
 
   return (
     <div>
-      <div>
+      <div
+      >
         <Sidebar
           data={data}
           setData={setData}

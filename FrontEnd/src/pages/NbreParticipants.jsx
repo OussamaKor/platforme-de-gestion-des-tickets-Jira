@@ -10,7 +10,7 @@ export default function NbreParticipant() {
   const [icons, setIcons] = useState([]);
   const [style, setStyle] = useState(1);
   return (
-    <div>
+    <div  >
       
         <Sidebar
           data={data}
