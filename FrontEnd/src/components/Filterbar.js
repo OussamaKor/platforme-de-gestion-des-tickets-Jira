@@ -40,10 +40,27 @@ export default function Filterbar(props) {
     var updatedList = [...checked];
     
     if (event.target.checked) {
+      props.setE(event.target.name)
       updatedList = [...checked, event.target.name];
       setChecked(updatedList);
       props.setLoading(true)
       axios
+      .patch(
+        `http://localhost:5000/visuals/SaveVisuals`,
+
+        {
+          visuals: updatedList,
+          projet: project,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: localStorage.getItem("jwt"),
+          },
+        }
+      ).then((result)=>{
+
+        axios
         .post(
           "http://localhost:5000/visuals/GetData",
 
@@ -62,9 +79,15 @@ export default function Filterbar(props) {
           props.setLoading(false)
 
           props.setStatistics(res.data.result)
+          
           setTest(!test)
           
         })
+          
+      })
+      .catch((err) => {
+      });
+     
     } else {
       updatedList.splice(checked.indexOf(event.target.name), 1);
   
@@ -90,9 +113,8 @@ export default function Filterbar(props) {
           setTest(!test)
           
         })
-    }
 
-    axios
+        axios
       .patch(
         `http://localhost:5000/visuals/SaveVisuals`,
 
@@ -111,75 +133,63 @@ export default function Filterbar(props) {
       })
       .catch((err) => {
       });
-
-      
-
-
+    }
   };
-
-
-
-
 
   return (
     <div className='filterbarcontainer'>
       <div className="row">
       <form id="formulaire">
-        <fieldset disabled={props.loading}>
+        <fieldset disabled={props.loading} >
           
-            <label className="control" >
-              <input className='StyleInput' type="checkbox" name="Suivi des bugs"  onChange={(event) =>handleCheck(event)} checked={checked.includes("Suivi des bugs")}  ></input>
+            <label className="control" style={props.loading?{cursor:"not-allowed"}:{cursor:"pointer"}} >
+              <input  className='StyleInput' type="checkbox" name="Suivi des bugs"  onChange={(event) =>handleCheck(event)} checked={checked.includes("Suivi des bugs")}  ></input>
               <span className="control__content">
-                Suivi des bugs
+                Bug tracking
               </span>
             </label>
-            <label className="control" >
+            <label className="control" style={props.loading?{cursor:"not-allowed"}:{cursor:"pointer"}}>
               <input className='StyleInput' type="checkbox" name="Gestion des incidents"  onChange={(event) =>handleCheck(event)} checked={checked.includes("Gestion des incidents")}></input>
               <span className="control__content">
-                Gestion des incidents
+                Number of tickets for the next period
               </span>
             </label>
-            <label className="control" name="science">
+            <label className="control" name="science" style={props.loading?{cursor:"not-allowed"}:{cursor:"pointer"}}>
               <input type="checkbox" className='StyleInput' name="Analyse de la productivité"  onChange={(event) =>handleCheck(event)} checked={checked.includes("Analyse de la productivité")}></input>
               <span className="control__content">
-                Analyse de la productivité
+                Productivity analysis
               </span>
             </label>
-            <label className="control" name="science">
+            <label className="control" name="science" style={props.loading?{cursor:"not-allowed"}:{cursor:"pointer"}}>
               <input type="checkbox" className='StyleInput' name="Suivi des temps planifiés"  onChange={(event) =>handleCheck(event)} checked={checked.includes("Suivi des temps planifiés")}></input>
               <span className="control__content">
-                Suivi des temps planifiés
+                Scheduled time tracking
               </span>
             </label>
-            <label className="control" name="science">
+            <label className="control" name="science" style={props.loading?{cursor:"not-allowed"}:{cursor:"pointer"}}>
               <input type="checkbox" className='StyleInput' name="Nombre de demandes par priorité" onChange={(event) =>handleCheck(event)} checked={checked.includes("Nombre de demandes par priorité")}></input>
               <span className="control__content">
-                Nombre de demandes par priorité
+                Number of requests by priority
               </span>
             </label>
           
-            <label className="control" name="science">
+            <label className="control" name="science" style={props.loading?{cursor:"not-allowed"}:{cursor:"pointer"}}>
               <input type="checkbox" className='StyleInput' name="Nombre total de tickets par type"  onChange={(event) =>handleCheck(event)} checked={checked.includes("Nombre total de tickets par type")}></input>
               <span className="control__content">
-                Nombre total de tickets par type
+                Total number of tickets by type
               </span>
             </label>
-            <label className="control" name="science">
-              <input type="checkbox"  className='StyleInput' name="Nombre total de tickets par intervenant"  onChange={(event) =>handleCheck(event)} checked={checked.includes("Nombre total de tickets par intervenant")}></input>
-              <span className="control__content">
-                Nombre total de tickets par intervenant
-              </span>
-            </label>
-            <label className="control" name="science">
+          
+            <label className="control" name="science" style={props.loading?{cursor:"not-allowed"}:{cursor:"pointer"}}>
               <input type="checkbox"  className='StyleInput' name="Ticket par priorité et par mois"  onChange={(event) =>handleCheck(event)} checked={checked.includes("Ticket par priorité et par mois")}></input>
               <span className="control__content">
-                Ticket par priorité et par mois
+                Ticket by priority and by month
               </span>
             </label>
-            <label className="control" name="science">
+            <label className="control" name="science" style={props.loading?{cursor:"not-allowed"}:{cursor:"pointer"}}>
               <input type="checkbox" className='StyleInput' name="Ticket par statut et par client"  onChange={(event) =>handleCheck(event)} checked={checked.includes("Ticket par statut et par client")}></input>
               <span className="control__content">
-                Ticket par statut et par client
+                Ticket by status
               </span>
             </label>
          
