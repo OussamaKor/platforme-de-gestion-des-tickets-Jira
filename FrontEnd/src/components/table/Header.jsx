@@ -8,7 +8,7 @@ import { Card, CardBody, CardTitle, Row, Col } from "reactstrap";
 
 const Header = () => {
   const { project } = useParams(); 
-  const [cards,setCards]=useState({"bugs":{}});
+  const [cards,setCards]=useState({"bugs":{},"dateDebut":[]});
   useEffect(() => {
   axios
         .post(
@@ -25,6 +25,7 @@ const Header = () => {
           }
         )
         .then((res) => {
+          
           
         setCards(res.data.card_data)
           
@@ -114,29 +115,24 @@ const Header = () => {
       </CardBody>
     </Card>
     <br/>
-    <Card className="card-stats mb-4 mb-xl-0">
+     <Card className="card-stats mb-4 mb-xl-0">
       <CardBody>
         <Row>
           <div className="col">
             <CardTitle tag="h5" className="text-uppercase text-muted mb-0">
-              Free employees
+            start of project:
             </CardTitle>
-            <span className="h2 font-weight-bold mb-0">4</span>
+            <br/>
+            <span className="h5 font-weight-bold mb-0">{cards.dateDebut[0]} {" "} {cards.dateDebut[1]} {" "} {cards.dateDebut[2]} {" "} {" "}</span>
           </div>
           <Col className="col-auto">
-            <div className="iconDashboard icon-shape bg-info text-white rounded-circle shadow">
-              <i className="fa fa-users" />
+            <div className="iconDashboard icon-shape bg-info-date text-white rounded-circle shadow">
+              <i className="fa fa-calendar" />
             </div>
           </Col>
         </Row>
-        <p className="mt-3 mb-0 text-muted text-sm">
-          <span className="text-nowrap">Total Employees : {" "}</span>
-          <span className="text-danger mr-2">
-           23 
-          </span>
-        </p>
       </CardBody>
-    </Card>
+    </Card> 
     <br/>
     <Card className="card-stats mb-4 mb-xl-0">
       <CardBody>

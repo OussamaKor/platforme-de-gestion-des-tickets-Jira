@@ -1036,3 +1036,20 @@ def get_tickets_no_closed(jira,project):
         
 
     return data 
+
+def date_debut_projet(jira,projet):
+    i=0
+    t = ""
+    j=0
+    while (1):
+        issues = jira.search_issues('project={}'.format(projet),  j-1,j+100)
+        i = len(issues)
+        if (len(issues) == 0 ):
+            break
+        t = issues[i-1]
+        if (i!=100):
+            break 
+        j+=100
+    d1=datetime.strptime((t.fields.created.split('.'))[0],'%Y-%m-%dT%H:%M:%S')
+    L=['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    return [d1.day,L[d1.month-1],d1.year]

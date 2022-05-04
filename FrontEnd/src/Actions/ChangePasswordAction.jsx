@@ -26,5 +26,5 @@ export default async function ChangePassword(props) {
           props.setError(true)
           props.setLoading(false)
           setTimeout(() => props.setError(false), 2500);
-        });
+      });
 }

@@ -6,7 +6,7 @@ import axios from "axios";
 import "../Assets/css/Filterbar.styles.css";
 
 export default function Filterbar(props) {
-  const { project } = useParams(); 
+  const {project} = useParams(); 
   const [checked, setChecked] = useState([]);
   const [test, setTest] = useState(true);
  
