@@ -8,6 +8,19 @@
 
    
   }
+.homeText
+{
+  color: #2b2b2b !important;
+  position: relative !important;
+}
+.homeText h1
+{
+  font-size: 400px !important;
+  position: absolute !important;
+  left: 50%;
+  top: 50% !important;
+  transform: translate(-50%, -50%);
+}
 .homeHeader {
     width: 100vw;
     background-repeat: no-repeat;

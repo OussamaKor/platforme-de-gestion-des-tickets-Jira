@@ -15,6 +15,7 @@ function FormulaireModele() {
   const [component,setComponent] = useState("") ;
   const [version,setVersion] = useState("") ;
   const [typeversion,setTypeversion] = useState("") ;
+  const [number,setNumber] = useState("") ;
   const [date,setDate] = useState(new Date()) ;
   
   function Prediction(e)
@@ -22,14 +23,15 @@ function FormulaireModele() {
     setLoading(true)
     e.preventDefault() ;
     axios
-        .post("http://localhost:5000/prediction/prediction",
+        .post("http://localhost:5000/prediction/prediction_hours",
         {
           "issue": issue,
           "priority": priority,
           "component": component,
           "version":version,
           "typeversion":typeversion,
-          "date":date
+          "date":date,
+          "number":number
         }, {
           headers: {
             "Content-Type": "application/json",
@@ -38,8 +40,9 @@ function FormulaireModele() {
         })
         .then((result) => {
           setLoading(false)
+          
             swal.fire({
-              text: `You should provide ${result.data.pred} participant(s)`,
+              text: `This ticket will take ${result.data.pred} hours to be resolved`,
               icon: 'success',
               confirmButtonColor: '#d81e05',
   
@@ -52,7 +55,7 @@ function FormulaireModele() {
   }
   return (
     <div className="Inscr_form">
-      <h3 className="text-center inscri-title" >Predict number of Participants</h3> 
+      <h3 className="text-center inscri-title" >Predict number of Hours</h3> 
       <MDBContainer >
         <MDBRow >
           <MDBCol md="12">
@@ -110,6 +113,10 @@ function FormulaireModele() {
                 <option value="Mineur">Minor</option>
                 <option value="Patch">Patch</option>
               </select>
+
+              <p>Number of participant</p>
+              <input className="form-select form-select-lg mb-3" type="number" onChange={(event)=>setNumber(event.target.value)} min="1"/>
+            
               <p>Date</p>
               {/* <MDBInput
                   required

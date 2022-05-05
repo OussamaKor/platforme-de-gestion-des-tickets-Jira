@@ -47,13 +47,6 @@ def user():
 @require_login
 def domaine():
    return change_domaine_service(g.user["email"],g.user['_id'])
-
-
-@user_api.route('/', methods=['GET'])
-@require_login
-def Test():
-  print(g.user)
-  return'f'
   
 
 

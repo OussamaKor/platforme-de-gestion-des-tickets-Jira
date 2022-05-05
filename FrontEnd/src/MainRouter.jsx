@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import NewPassword from "./pages/New-password";
+import NbreHours from "./pages/NbreHours";
 import Reset from "./pages/Reset";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
@@ -19,7 +20,8 @@ export default function MainRouter() {
     if (jwt) {
       if (
         !location.pathname.startsWith("/project") &&
-        !location.pathname.startsWith("/PredictionNbreParticipant")
+        !location.pathname.startsWith("/PredictionNbreParticipant")&&
+        !location.pathname.startsWith("/PredictionNbreHours")
       ) {
         navigate("/");
       }
@@ -54,6 +56,11 @@ export default function MainRouter() {
         exact
         path={"/PredictionNbreParticipant"}
         element={<NbreParticipant />}
+      />
+      <Route
+        exact
+        path={"/PredictionNbreHours"}
+        element={<NbreHours />}
       />
     </Routes>
   );

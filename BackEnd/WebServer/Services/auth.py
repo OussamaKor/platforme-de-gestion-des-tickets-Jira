@@ -51,8 +51,6 @@ def signup_service():
 
 
 def login_service():
-    # print(User.list_indexes())
-    print(request.json.get('email'))
     user=User.objects(email=request.json.get('email'))
     
     

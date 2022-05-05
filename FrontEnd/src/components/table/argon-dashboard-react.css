@@ -572,6 +572,10 @@ button.bg-success:focus {
   background-color: #11cdef !important; }
 .bg-info-date {
   background-color: #24a46d !important; }
+.bg-info-closed {
+  background-color: #eaa609 !important; }
+.bg-info-open {
+  background-color: #1d8bcf !important; }
 
 a.bg-info:hover, a.bg-info:focus,
 button.bg-info:hover,

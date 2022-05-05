@@ -11,7 +11,6 @@ import ScatterTime from "./Charts/ScatterTime";
 import HistogramNbresTickets from "./Charts/HistogramNbresTickets";
 import { Spinner } from "react-bootstrap";
 export default function Cards(props) {
-  console.log(props.statistics);
   return (
     <div className="Con-style">
       <div className="Card_One_Style">

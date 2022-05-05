@@ -23,7 +23,6 @@ import {
 import "./argon-dashboard-react.css";
 
 const Tables = (props) => {
-  //console.log(props.statistics[0])
   const [compteur, setCompteur] = useState(0);
   return (
     <>
@@ -102,7 +101,7 @@ const Tables = (props) => {
                                 </DropdownToggle>
                                 <DropdownMenu
                                   className="dropdown-menu-arrow"
-                                  right
+                                  end
                                 >
                                   <DropdownItem
                                     href="#pablo"
@@ -127,7 +126,7 @@ const Tables = (props) => {
                             </td>
                           </tr>
                         ) : (
-                          ""
+                          null
                         )}
                       </>
                     );

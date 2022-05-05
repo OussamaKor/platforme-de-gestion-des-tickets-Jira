@@ -606,11 +606,11 @@ def get_issues_by_priority_file(project,id_user):
     return l
 
 
-def get_bugs(project,jira):
+def get_bugs(project,jira,result):
     month={1:'Jan', 2:'Feb', 3:'Mar', 4:'Apr', 5:'May', 6:'Jun', 7:'Jul', 8:'Aug', 9:'Sep', 10:'Oct', 11:'Nov', 12:'Dec'}
     d=get_bugs_by_month_jira(project,jira)[0]
     now=datetime.today()
-    result={'nb_bugs':0,'pourcentage':0,'arrow':""}
+    # result={'nb_bugs':0,'pourcentage':0,'arrow':""}
     nb_bugs_last_month=d[month[now.month-1]]
     nb_bugs=d[month[now.month]]
     result['nb_bugs']=nb_bugs
@@ -640,7 +640,6 @@ def get_projects_informations(jira,projects):
     for project in projects :
         nb_bug_month=0
         nb_bug_last_month=0
-        print(i)
         p=jira.search_issues('project={}'.format(project), maxResults=1,json_result=True)["issues"][0]["fields"]["project"]['avatarUrls']["24x24"]
         notifications.append([])
 
@@ -1014,13 +1013,16 @@ def Prediction_Number_Participants(issue_type,priority,annee,jour,mois,number_co
     return (model_participant.predict([[issue_type_enc,int(priority),int(annee),int(jour),int(mois),int(number_components),int(number_versions),version_type_enc]]))[0][0]
 
 
-def get_tickets_no_closed(jira,project):
-    data=dict()
+
+
+def get_tickets_no_closed(jira,project,data):
+    
+    data["nb"]=0
     test=False
-    status=[]
     size = 100
     initial = 0
     i=0
+    now=datetime.today()
     while True:
         start= initial*size
         issues = jira.search_issues('project={}'.format(project),  start,size)
@@ -1032,12 +1034,36 @@ def get_tickets_no_closed(jira,project):
             test=True
         
         for issue in issues:
-            print(issue)
-        
+            a=int(issue.fields.created.split("-")[0])
+            m=int(issue.fields.created.split("-")[1])
+            j=int(issue.fields.created.split("-")[2][:2])
+            d=date(a,m,j)
+            if(((date(now.year,now.month,now.day)-d).days<=7 ) and issue.fields.status.name=="Open" ):
+                 data["nb"]+=1
+    
 
-    return data 
 
-def date_debut_projet(jira,projet):
+def Prediction_Number_Hours(issue_type,priority,annee,jour,mois,number_components,number_versions,version_type,nb_participant):
+   
+    
+    file = open('../IA/encoderTypeTicket', 'rb')
+    Type_ticket = pickle.load(file)
+
+    issue_type_enc=(Type_ticket.transform([issue_type]))[0]
+
+    file = open('../IA/encoderTypeVersion', 'rb')
+    Type_version = pickle.load(file)
+
+    version_type_enc=(Type_version.transform([version_type]))[0]
+
+    file = open('../IA/time', 'rb')
+    model_hours = pickle.load(file)
+
+
+
+    return (model_hours.predict([[issue_type_enc,int(priority),int(nb_participant),int(annee),int(jour),int(mois),int(number_components),int(number_versions),version_type_enc]]))[0]
+
+def date_debut_projet(jira,projet,data):
     i=0
     t = ""
     j=0
@@ -1052,4 +1078,73 @@ def date_debut_projet(jira,projet):
         j+=100
     d1=datetime.strptime((t.fields.created.split('.'))[0],'%Y-%m-%dT%H:%M:%S')
     L=['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-    return [d1.day,L[d1.month-1],d1.year]
+    
+    data[0]=d1.day
+    data[1]=L[d1.month-1]
+    data[2]=d1.year
+    
+
+
+def ticketsToday(jira,project,open):
+    test=False
+    size = 100
+    initial = 0
+
+    i=0
+
+    now=datetime.today()
+    
+  
+    while True:
+        start= initial*size
+        issues = jira.search_issues('project={}'.format(project),  start,size)
+        if len(issues) == 0:
+            break
+        initial += 1
+
+        if(test):
+            break
+
+        for issue in issues :
+            a=int(issue.fields.created.split("-")[0])
+            m=int(issue.fields.created.split("-")[1])
+            j=int(issue.fields.created.split("-")[2][:2])
+            if a==now.year and m==now.month and j==now.day:
+                i+=1
+            else :
+                test=True
+    
+    open[0]=i
+    
+   
+
+
+def ticketsTodayClosed(jira,project,closed_today):
+    test=False
+    size = 100
+    initial = 0
+    i=0
+    now=datetime.today()
+   
+  
+    while True:
+        start= initial*size
+        issues = jira.search_issues('project={}'.format(project),  start,size)
+        if len(issues) == 0:
+            break
+        initial += 1
+
+        if(test):
+            break
+
+        for issue in issues :
+            if(issue.fields.resolutiondate is not None):
+                a=int(issue.fields.resolutiondate.split("-")[0])
+                m=int(issue.fields.resolutiondate.split("-")[1])
+                j=int(issue.fields.resolutiondate.split("-")[2][:2])
+                if a==now.year and m==now.month and j==now.day:
+                    i+=1
+                else :
+                    test=True
+
+    closed_today[0]=i
